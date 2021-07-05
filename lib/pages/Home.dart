@@ -1,4 +1,6 @@
+import '../provider/CountProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'CategoryPage.dart';
 
 class Home extends StatefulWidget {
@@ -47,14 +49,16 @@ class _HomeState extends State<Home> {
               FlatButton(onPressed: () {}, child:  Text('FlatButton 已经停用')),
               OutlineButton(onPressed: () {}, child:  Text('OutlineButton 已经停用')),
               IconButton(
-                onPressed: () {}, 
+                onPressed: () {
+                  // print(Provider.of<CountProvider>(context).count.toString());
+                },
                 icon: Icon(Icons.access_time_sharp),
                 color: Colors.yellow,
                 constraints: BoxConstraints(),
               ),
               ElevatedButton(
                 onPressed: () {}, 
-                child: Text('圆角'), 
+                child: Text(Provider.of<CountProvider>(context).count.toString()),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.blue),
                   foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -73,7 +77,10 @@ class _HomeState extends State<Home> {
             ],
           ),
           FloatingActionButton(
-            onPressed: () => {},
+            onPressed: () => {
+            //  全局count++
+              context.read<CountProvider>().add()
+            },
             child: Icon(Icons.add),
             tooltip: 'add',
           )

@@ -1,3 +1,6 @@
+import 'provider/CountProvider.dart';
+import 'package:provider/provider.dart';
+
 import 'pages/FormPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +13,28 @@ import 'pages/Tabs.dart';
 import 'pages/AppBarPage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+        // 但数据提供公共数据
+        // ChangeNotifierProvider(
+        //     create: (context) => CountProvider(),
+        //     child: MyApp()
+        // ),
+        //  多数据提供
+        MultiProvider(
+          providers: [
+            // 数组中添加提供的数据
+            ChangeNotifierProvider(
+              create: (context) => CountProvider(),
+            ),
+          ],
+          child: MyApp(),
+        ));
 
 class MyApp extends StatelessWidget {
   final Map<String, Function> routes = {
     '/': (context, {arguments}) => Tabs(),
-    '/form':(context, {arguments}) => FormPage(),
-    '/categoryPage':(context, {arguments}) => CategoryPage(),
+    '/form': (context, {arguments}) => FormPage(),
+    '/categoryPage': (context, {arguments}) => CategoryPage(),
     '/loginPage': (context) => LoginPage(),
     '/registerPage': (context) => RegisterPage(),
     '/appBarPage': (context) => AppBarDemoPage(),
@@ -39,24 +57,27 @@ class MyApp extends StatelessWidget {
       // home: Tabs(),
       routes: {
         '/login': (context) => LoginPage(),
-        '/formPage':(context) => FormPage(),
+        '/formPage': (context) => FormPage(),
         '/tabBarControlPage': (context) => TabBarControlerPage(),
       },
       onGenerateRoute: (RouteSettings settings) {
         // String? name;
         print(settings);
-        if(settings.name != null) {
+        if (settings.name != null) {
           final String? name = settings.name;
           // final args = settings.arguments;
           final Function pageContentBuilder = this.routes[name] as Function;
 
-          if(settings.arguments != null) {
+          if (settings.arguments != null) {
             print('有arg');
-            final	Route route = MaterialPageRoute(builder: (context) => pageContentBuilder(context, arguments: settings.arguments));
+            final Route route = MaterialPageRoute(
+                builder: (context) =>
+                    pageContentBuilder(context, arguments: settings.arguments));
             return route;
           } else {
             print('无arg');
-            final Route route = MaterialPageRoute(builder: (context) => pageContentBuilder(context));
+            final Route route = MaterialPageRoute(
+                builder: (context) => pageContentBuilder(context));
             return route;
           }
         }
@@ -68,8 +89,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
 
 // 有状态组件
 class StateFullPage extends StatefulWidget {
@@ -87,7 +106,7 @@ class _StateFullPageState extends State<StateFullPage> {
       children: [
         Chip(label: Text('${this.contNum}')),
         ElevatedButton(
-          onPressed: (){
+          onPressed: () {
             setState(() {
               this.contNum++;
             });
@@ -97,17 +116,14 @@ class _StateFullPageState extends State<StateFullPage> {
         Home(),
         // RaisedButton(onPressed: () {},child: Text('Raised'),),
       ],
-
     );
   }
 }
 
-
 class LayoutWrap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    return  Wrap(
+    return Wrap(
       spacing: 10,
       runSpacing: 10,
       children: [
@@ -122,19 +138,17 @@ class LayoutWrap extends StatelessWidget {
       ],
     );
   }
-
 }
 
-class ButtonCon extends  StatelessWidget{
+class ButtonCon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         child: Text('点击'),
-        onPressed: (){},
-        style: ButtonStyle(backgroundColor:  MaterialStateProperty.all(Colors.red))
-    );
+        onPressed: () {},
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.red)));
   }
-
 }
 
 class LayoutCard1 extends StatelessWidget {
@@ -151,9 +165,7 @@ class LayoutCard1 extends StatelessWidget {
                   child: Image.network(
                     'https://www.itying.com/images/flutter/1.png',
                     fit: BoxFit.cover,
-
-                  )
-              ),
+                  )),
               ListTile(
                 // leading: ClipOval(
                 //     child: Image.network(
@@ -163,7 +175,8 @@ class LayoutCard1 extends StatelessWidget {
                 //       height: 50,
                 // )),
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage('https://www.itying.com/images/flutter/1.png'),
+                  backgroundImage: NetworkImage(
+                      'https://www.itying.com/images/flutter/1.png'),
                 ),
                 title: Text('标题'),
                 subtitle: Text('子标题'),
